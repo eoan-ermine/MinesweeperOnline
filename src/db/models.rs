@@ -10,7 +10,7 @@ pub struct NewDuel {
     pub(crate) winner: Option<bool>,
 }
 
-#[derive(Queryable)]
+#[derive(Queryable, Serialize)]
 pub struct Duel {
     pub(crate) id: i32,
     pub(crate) suspect_id: i32,
@@ -27,7 +27,7 @@ pub struct NewMove {
     pub(crate) info: i32,
 }
 
-#[derive(Queryable)]
+#[derive(Queryable, Serialize)]
 pub struct Move {
     pub(crate) id: i32,
     pub(crate) match_id: i32,

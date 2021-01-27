@@ -7,3 +7,10 @@ edition = "2018"
 [dependencies]
 libsqlite3-sys = { version = "0.9.1", features = ["bundled"] }
 diesel = { version = "1.4.4", features = ["sqlite"] }
+rocket = "0.4.6"
+serde = {version = "1.0", features = ["derive"]}
+
+[dependencies.rocket_contrib]
+version = "0.4.6"
+default-features = false
+features = ["json"]
