@@ -12,8 +12,11 @@ table! {
     moves (id) {
         id -> Integer,
         match_id -> Integer,
-        info -> Binary,
+        info -> Integer,
     }
 }
 
-allow_tables_to_appear_in_same_query!(duel, moves,);
+allow_tables_to_appear_in_same_query!(
+    duel,
+    moves,
+);
