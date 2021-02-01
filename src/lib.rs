@@ -4,3 +4,4 @@ extern crate diesel;
 extern crate serde;
 
 pub mod db;
+pub mod r#move;
