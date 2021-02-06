@@ -19,7 +19,7 @@ class Minesweeper:
         return [self.field[i][j] for i, j in neighbourhood]
 
     def initialize_field(self):
-        self.field = [[Square(i, j, SquareContent.NONE, False, "E") for i in range(self.description.width)]
+        self.field = [[Square(i, j, SquareContent.EMPTY, False, 0) for i in range(self.description.width)]
                       for j in range(self.description.height)]
 
     def initialize_cells(self):
@@ -27,15 +27,12 @@ class Minesweeper:
         mines = random.sample(positions, self.description.mines)
 
         for x, y in mines:
-            self.field[x][y] = Square(x, y, SquareContent.MINE, False, "*")
+            self.field[x][y] = Square(x, y, SquareContent.MINE, False)
 
             for cell_x, cell_y in self.get_neighbourhood(x, y):
                 cell = self.field[cell_y][cell_x]
-                if cell.content == SquareContent.NONE:
-                    cell.content = SquareContent.EMPTY
-                    cell.text = "1"
-                elif cell.content == SquareContent.EMPTY:
-                    cell.text = str(int(cell.text) + 1)
+                if cell.content == SquareContent.EMPTY:
+                    setattr(cell.content, "value", getattr(cell.content, "value", 0) + 1)
 
     def open_cells(self, predicate, cells):
         for e in cells:

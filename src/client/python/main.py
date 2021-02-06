@@ -1,5 +1,9 @@
+from minesweeper_gui import MinesweeperGUI
+
+
 def __main__():
-    pass
+    gui = MinesweeperGUI(500, 500, 30)
+    gui.run()
 
 
 if __name__ == "__main__":
