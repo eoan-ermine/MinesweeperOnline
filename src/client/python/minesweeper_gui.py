@@ -2,6 +2,7 @@ from utils.utils import FieldDescription
 from utils.text import Text, BorderedText
 from utils.group import Group
 from utils.slider import Slider
+from utils.event_dispatcher import EventDispatcher
 
 import sys
 import pygame
@@ -48,22 +49,14 @@ class MinesweeperGUI:
         title.set_center((self.width // 2), self.height // 15)
 
         slider = Slider((self.width // 2, self.height // 2), (100, 100), (255, 0, 0))
+        dispatcher = EventDispatcher([slider])
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.terminate()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if slider.collidepoint(event.pos):
-                        slider.clicked(event)
-                        slider.moving = True
-                if event.type == pygame.MOUSEMOTION:
-                    if slider.moving:
-                        slider.clicked(event)
-                if event.type == pygame.MOUSEBUTTONUP:
-                    if slider.moving:
-                        slider.moving = False
-
+                dispatcher.dispatch_event(event)
+                
             self.screen.fill((255, 255, 255))
             
             labels.draw(self.screen)
