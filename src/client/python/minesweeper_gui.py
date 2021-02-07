@@ -1,5 +1,6 @@
-from utils import FieldDescription
-from text import Text, BorderedText
+from utils.utils import FieldDescription
+from utils.text import Text, BorderedText
+from utils.group import Group
 
 import sys
 import pygame
@@ -34,41 +35,51 @@ class MinesweeperGUI:
         clock = pygame.time.Clock()
 
         title_text = "The Ultimate Minesweeper"
-        menu_text = [
-            "[ИГРАТЬ]",
-            "[НАСТРОЙКИ]",
-            "[ВЫХОД]"
-        ]
 
-        background_color = (255, 255, 255)
         font = pygame.font.Font(None, 30)
 
-        title = Text(font, title_text, 1, (0, 0, 0))
+        labels = Group("labels")
+        menu_labels = Group("menu_labels")
+
+        play_label = BorderedText(font, "[ИГРАТЬ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
+        play_label.clicked = lambda e: print("Нажатие на кнопку начала игры")
+
+        settings_label = BorderedText(font, "[НАСТРОЙКИ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
+        settings_label.clicked = lambda e: print("Нажатие на кнопку открытия настроек")
+
+        exit_label = BorderedText(font, "[ВЫХОД]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
+        exit_label.clicked = lambda e: print("Нажатие на кнопку выхода")
+
+        menu_labels.invoke(lambda e: e.connect("focused", lambda k: k.set_border_enable(True)))
+
+        background_color = (255, 255, 255)
+
+        title = Text(font, title_text, 1, (0, 0, 0), labels)
         title.set_center((self.width // 2), self.height // 15)
 
-        menu_labels = []
-        for i, line in enumerate(menu_text):
-            string = BorderedText(font, line, 1, (0, 0, 0), (20, 255, 23))
+        for i, string in enumerate(menu_labels):
             string.set_center((self.width // 2), (self.height // 3 + i * 50))
-            menu_labels.append(string)
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.terminate()
                 if event.type == pygame.MOUSEMOTION:
-                    mouse_position = pygame.mouse.get_pos()
-                    for label in menu_labels:
-                        if label.rect.collidepoint(*mouse_position):
-                            label.set_border_enable(True)
-                        else:
-                            label.set_border_enable(False)
+                    mouse_position = event.pos
+
+                    label = menu_labels.collidepoint(mouse_position)
+                    if label:
+                        label.focused(label)
+                    else:
+                        menu_labels.invoke(lambda e: e.set_border_enable(False))
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_position = event.pos
+                    label = menu_labels.collidepoint(mouse_position)
+                    if label: label.clicked(label)
 
             self.screen.fill(background_color)
-
-            title.draw(self.screen)
-            for label in menu_labels:
-                label.draw(self.screen)
+            labels.draw(self.screen)
 
             pygame.display.flip()
             clock.tick(self.framerate)
@@ -76,13 +87,13 @@ class MinesweeperGUI:
     @staticmethod
     def terminate():
         clock = pygame.time.Clock()
-        pygame.mixer.music.load("resources/final_message.mp3")
+        pygame.mixer.music.load("src/client/python/resources/final_message.mp3")
         pygame.mixer.music.play()
 
         while pygame.mixer.music.get_busy():
             clock.tick(30)
 
-        pygame.mixer.music.load("resources/ending.mp3")
+        pygame.mixer.music.load("src/client/python/resources/ending.mp3")
         pygame.mixer.music.play()
 
         # Create layered window

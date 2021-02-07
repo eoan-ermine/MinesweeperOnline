@@ -1,8 +1,13 @@
 import pygame
+from utils.pobject import Object
 
+class Text(Object):
+    def __init__(self, font, content, size, color, *groups):
+        super().__init__(["clicked", "focused"])
 
-class Text:
-    def __init__(self, font, content, size, color):
+        for group in groups:
+            group.add(self)
+
         self.content = content
         self.size = size
         self.color = color
@@ -20,8 +25,8 @@ class Text:
 
 
 class BorderedText(Text):
-    def __init__(self, font, content, size, color, border_color):
-        super().__init__(font, content, size, color)
+    def __init__(self, font, content, size, color, border_color, *groups):
+        super().__init__(font, content, size, color, *groups)
 
         self.border_color = border_color
         self.border_state = False

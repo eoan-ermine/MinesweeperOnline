@@ -8,7 +8,7 @@ class FieldDescription:
         self.mines = mines
 
 
-class SquareContent:
+class SquareContent(Enum):
     MINE = 1,
     EMPTY = 2,
     MINE_FLAG = 3,
@@ -25,7 +25,7 @@ class SquareContent:
 
 
 class Square:
-    def __init__(self, x, y, content: SquareContent, visible: bool, value: int):
+    def __init__(self, x, y, content: SquareContent, visible: bool, value: int=None):
         self.x = x
         self.y = y
 
@@ -38,7 +38,7 @@ class Square:
         return iter((self.x, self.y))
 
     def __str__(self) -> str:
-        return self.text
+        return self.__repr__()
 
     def __repr__(self) -> str:
         return f"Square({self.x}, {self.y}, {self.content.__str__()}, {self.visible})"

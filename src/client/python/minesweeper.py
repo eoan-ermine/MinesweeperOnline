@@ -1,4 +1,4 @@
-from utils import FieldDescription, SquareContent, Square, \
+from utils.utils import FieldDescription, SquareContent, Square, \
     GameState
 import random
 
@@ -48,16 +48,16 @@ class Minesweeper:
 
         if content == SquareContent.EMPTY:
             cell.visible = True
-            self.open_cells(filter(
+            self.open_cells(
                 lambda e: e.content == SquareContent.EMPTY and not e.visible,
                 self.get_neighbourhood(x, y)
-            ))
+            )
         elif content == SquareContent.MINE:
             cell.visible = True
-            self.open_cells(filter(
+            self.open_cells(
                 lambda e: e.content == SquareContent.MINE and not e.visible,
                 self.field
-            ))
+            )
 
     def __init__(self, description: FieldDescription):
         self.description = description
