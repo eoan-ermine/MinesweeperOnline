@@ -76,13 +76,13 @@ class MinesweeperGUI:
     @staticmethod
     def terminate():
         clock = pygame.time.Clock()
-        pygame.mixer.music.load("final_message.mp3")
+        pygame.mixer.music.load("resources/final_message.mp3")
         pygame.mixer.music.play()
 
         while pygame.mixer.music.get_busy():
             clock.tick(30)
 
-        pygame.mixer.music.load("ending.mp3")
+        pygame.mixer.music.load("resources/ending.mp3")
         pygame.mixer.music.play()
 
         # Create layered window
