@@ -1,6 +1,7 @@
 from utils.utils import FieldDescription
 from utils.text import Text, BorderedText
 from utils.group import Group
+from utils.slider import Slider
 
 import sys
 import pygame
@@ -31,6 +32,47 @@ class MinesweeperGUI:
 
         self.start_menu()
 
+    def single_game(self):
+        pass
+
+    def settings_menu(self):
+        clock = pygame.time.Clock()
+
+        title_text = "Settings"
+        font = pygame.font.Font(None, 30)
+
+        labels = Group("labels")
+        menu_labels = Group("menu_labels")
+
+        title = Text(font, title_text, 1, (0, 0, 0), labels)
+        title.set_center((self.width // 2), self.height // 15)
+
+        slider = Slider((self.width // 2, self.height // 2), (100, 100), (255, 0, 0))
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.terminate()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if slider.collidepoint(event.pos):
+                        slider.clicked(event)
+                        slider.moving = True
+                if event.type == pygame.MOUSEMOTION:
+                    if slider.moving:
+                        slider.clicked(event)
+                if event.type == pygame.MOUSEBUTTONUP:
+                    if slider.moving:
+                        slider.moving = False
+
+            self.screen.fill((255, 255, 255))
+            
+            labels.draw(self.screen)
+            slider.draw(self.screen)
+
+            pygame.display.flip()
+            clock.tick(self.framerate)
+
+
     def start_menu(self):
         clock = pygame.time.Clock()
 
@@ -42,13 +84,13 @@ class MinesweeperGUI:
         menu_labels = Group("menu_labels")
 
         play_label = BorderedText(font, "[ИГРАТЬ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        play_label.clicked = lambda e: print("Нажатие на кнопку начала игры")
+        play_label.clicked = lambda e: self.single_game()
 
         settings_label = BorderedText(font, "[НАСТРОЙКИ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        settings_label.clicked = lambda e: print("Нажатие на кнопку открытия настроек")
+        settings_label.clicked = lambda e: self.settings_menu()
 
         exit_label = BorderedText(font, "[ВЫХОД]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        exit_label.clicked = lambda e: print("Нажатие на кнопку выхода")
+        exit_label.clicked = lambda e: self.terminate()
 
         menu_labels.invoke(lambda e: e.connect("focused", lambda k: k.set_border_enable(True)))
 
@@ -83,7 +125,7 @@ class MinesweeperGUI:
 
             pygame.display.flip()
             clock.tick(self.framerate)
-
+    
     @staticmethod
     def terminate():
         clock = pygame.time.Clock()
