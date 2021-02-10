@@ -20,10 +20,6 @@ class Slider(Object):
 
         self.ppv = self.border_rect.width // 100
 
-    def collidepoint(self, point):
-        if self.border_rect.collidepoint(*point):
-            return self
-        return None
 
     def set_moving(self, state):
         self.moving = state

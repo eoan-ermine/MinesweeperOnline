@@ -44,13 +44,18 @@ class MinesweeperGUI:
         font = pygame.font.Font(None, 30)
 
         labels = Group("labels")
+        menu_labels = Group("menu_labels")
+
+        volume_text = Text(font, "Музыка", 1, (0, 0, 0), menu_labels)
+        volume_text.set_center((self.width // 6), (self.height // 4))
+
+        volume_slider = Slider((self.width // 6 + 70, self.height // 4 - 10), (300, 20), (255, 0, 0))
+        volume_slider.set_volume(100)
 
         title = Text(font, title_text, 1, (0, 0, 0), labels)
         title.set_center((self.width // 2), self.height // 15)
 
-        slider = Slider((self.width // 2, self.height // 2), (100, 100), (255, 0, 0))
-        dispatcher = EventDispatcher([slider])
-
+        dispatcher = EventDispatcher([volume_slider])
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -60,7 +65,8 @@ class MinesweeperGUI:
             self.screen.fill((255, 255, 255))
             
             labels.draw(self.screen)
-            slider.draw(self.screen)
+            menu_labels.draw(self.screen)
+            volume_slider.draw(self.screen)
 
             pygame.display.flip()
             clock.tick(self.framerate)
