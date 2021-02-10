@@ -12,7 +12,7 @@ class EventDispatcher:
     def dispatch_signal(self, event, signal):
         subscribers = self.signal_to_subscribers.get(signal, [])
         for subscriber in subscribers:
-            getattr(subscriber, signal)(subscriber, event)
+           subscriber.signal(signal, event)
 
     def dispatch_event(self, event):
         event_type = event.type
@@ -21,5 +21,6 @@ class EventDispatcher:
             self.dispatch_signal(event, "mouse_motion")
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.dispatch_signal(event, "mouse_down")
+            self.dispatch_signal(event, "clicked")
         elif event.type == pygame.MOUSEBUTTONUP:
             self.dispatch_signal(event, "mouse_up")

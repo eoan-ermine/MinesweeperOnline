@@ -25,6 +25,7 @@ class MinesweeperGUI:
         self.framerate = framerate
 
         self.screen = None
+        self.music_volume = 100
 
     def run(self):
         pygame.init()
@@ -43,7 +44,6 @@ class MinesweeperGUI:
         font = pygame.font.Font(None, 30)
 
         labels = Group("labels")
-        menu_labels = Group("menu_labels")
 
         title = Text(font, title_text, 1, (0, 0, 0), labels)
         title.set_center((self.width // 2), self.height // 15)
@@ -77,13 +77,13 @@ class MinesweeperGUI:
         menu_labels = Group("menu_labels")
 
         play_label = BorderedText(font, "[ИГРАТЬ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        play_label.clicked = lambda e: self.single_game()
+        play_label.connect("clicked", lambda e: self.single_game())
 
         settings_label = BorderedText(font, "[НАСТРОЙКИ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        settings_label.clicked = lambda e: self.settings_menu()
+        settings_label.connect("clicked", lambda e: self.settings_menu())
 
         exit_label = BorderedText(font, "[ВЫХОД]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        exit_label.clicked = lambda e: self.terminate()
+        exit_label.connect("clicked", lambda e: self.terminate())
 
         menu_labels.invoke(lambda e: e.connect("focused", lambda k: k.set_border_enable(True)))
 
@@ -104,14 +104,14 @@ class MinesweeperGUI:
 
                     label = menu_labels.collidepoint(mouse_position)
                     if label:
-                        label.focused(label)
+                        label.signal("focused", label)
                     else:
                         menu_labels.invoke(lambda e: e.set_border_enable(False))
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_position = event.pos
                     label = menu_labels.collidepoint(mouse_position)
-                    if label: label.clicked(label)
+                    if label: label.signal("clicked", label)
 
             self.screen.fill(background_color)
             labels.draw(self.screen)
