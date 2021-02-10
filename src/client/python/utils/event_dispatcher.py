@@ -1,5 +1,6 @@
 import pygame
 
+
 class EventDispatcher:
     def __init__(self, subscribers):
         self.subscribers = subscribers
@@ -12,7 +13,7 @@ class EventDispatcher:
     def dispatch_signal(self, event, signal):
         subscribers = self.signal_to_subscribers.get(signal, [])
         for subscriber in subscribers:
-           subscriber.signal(signal, event)
+            subscriber.signal(signal, event)
 
     def dispatch_event(self, event):
         event_type = event.type

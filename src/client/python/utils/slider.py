@@ -20,6 +20,9 @@ class Slider(Object):
 
         self.ppv = self.border_rect.width // 100
 
+    def signal_filter(self, signal, *args, **kwargs):
+        event = args[0]
+        return self.border_rect.collidepoint(*event.pos)
 
     def set_moving(self, state):
         self.moving = state
