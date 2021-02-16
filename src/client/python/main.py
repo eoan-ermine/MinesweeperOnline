@@ -1,4 +1,4 @@
-from minesweeper_gui import MinesweeperGUI
+from src.client.python.minesweeper_gui import MinesweeperGUI
 
 
 def __main__():
