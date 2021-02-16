@@ -6,11 +6,11 @@ from src.client.python.utils.pobject import Object
 
 class Slider(Object):
     def __init__(self, topleft, size, color):
-        super().__init__(["mouse_down", "mouse_up", "mouse_motion", "value_changed"])
+        super().__init__(["mouse_down", "mouse_up", "mouse_motion", "value_changed", "value_stabilized"])
         
         self.connect("mouse_down", lambda event: self.clicked_handler(event))
         self.connect("mouse_motion", lambda event: self.motion_handler(event))
-        self.connect("mouse_up", lambda _: self.set_moving(False))
+        self.connect("mouse_up", lambda _: self.mouse_up_handler())
 
         self.volume = 0
         self.color = color
@@ -26,6 +26,11 @@ class Slider(Object):
     def motion_handler(self, event):
         if self.moving:
             self.change_volume_by_pos(event.pos)
+
+    def mouse_up_handler(self):
+        if self.moving:
+            self.set_moving(False)
+            self.signal("value_stabilized", self.volume)
 
     def change_volume_by_pos(self, pos):
         self.set_volume((pos[0] - self.border_rect.x) // self.ppv)

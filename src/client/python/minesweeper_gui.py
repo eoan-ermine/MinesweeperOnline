@@ -1,6 +1,7 @@
 import pygame
 
 from src.client.python.scenes.setting_scene import SettingScene
+from src.client.python.settings.settings import Format, Settings
 from src.client.python.utils.group import Group
 from src.client.python.utils.text import BorderedText, Text
 from src.client.python.utils.utils import terminate, FieldDescription
@@ -19,7 +20,9 @@ class MinesweeperGUI:
         self.framerate = framerate
 
         self.screen = None
-        self.music_volume = 100
+        self.settings = Settings(Format.IniFormat, "settings.ini")
+
+        self.settings.set_value("music_volume", self.settings.value("music_volume", "100"))
 
     def run(self):
         pygame.init()
@@ -45,8 +48,10 @@ class MinesweeperGUI:
         play_label.connect("clicked", lambda e: self.single_game())
 
         settings_label = BorderedText(font, "[НАСТРОЙКИ]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
-        settings_label.connect("clicked", lambda e: SettingScene(width=self.width, height=self.height).run(self.screen,
-                                                                                                           self.framerate))
+        settings_label.connect("clicked",
+                               lambda e: SettingScene(width=self.width, height=self.height, settings=self.settings).run(
+                                   self.screen,
+                                   self.framerate))
 
         exit_label = BorderedText(font, "[ВЫХОД]", 1, (0, 0, 0), (20, 255, 23), labels, menu_labels)
         exit_label.connect("clicked", lambda e: terminate())

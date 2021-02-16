@@ -19,6 +19,8 @@ class SettingScene(Scene):
         self.labels = None
         self.menu_labels = None
 
+        self.settings = getattr(self, "settings")
+
         self.init_ui()
         self.init_signals()
 
@@ -41,8 +43,8 @@ class SettingScene(Scene):
         title.set_center((width // 2), height // 15)
 
     def init_signals(self):
-        self.volume_slider.connect("value_changed", lambda new_value: print(new_value))
-        self.volume_slider.set_volume(100)
+        self.volume_slider.connect("value_stabilized", lambda new: self.settings.set_value("music_volume", str(new)))
+        self.volume_slider.set_volume(int(self.settings.value("music_volume")))
 
     def draw(self, screen):
         screen.fill((255, 255, 255))
