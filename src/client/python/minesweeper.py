@@ -1,6 +1,6 @@
-from utils.utils import FieldDescription, SquareContent, Square, \
-    GameState
 import random
+
+from src.client.python.utils.utils import Square, SquareContent, GameState, FieldDescription
 
 
 class Minesweeper:

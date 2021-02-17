@@ -1,5 +1,7 @@
 import pygame
-from utils.pobject import Object
+
+from src.client.python.utils.pobject import Object
+
 
 class Text(Object):
     def __init__(self, font, content, size, color, *groups):
