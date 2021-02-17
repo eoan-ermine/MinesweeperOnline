@@ -1,9 +1,10 @@
 import pygame
 
+from src.client.python.scenes.menu_scene import MenuScene
 from src.client.python.scenes.setting_scene import SettingScene
 from src.client.python.settings.settings import Format, Settings
 from src.client.python.utils.group import Group
-from src.client.python.utils.text import BorderedText, Text
+from src.client.python.widgets.text import BorderedText, Text
 from src.client.python.utils.utils import terminate, FieldDescription
 
 presets = {
@@ -29,7 +30,7 @@ class MinesweeperGUI:
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("The Ultimate Minesweeper")
 
-        self.start_menu()
+        MenuScene(self).run(self.screen, self.framerate).run()
 
     def single_game(self):
         pass
@@ -89,3 +90,18 @@ class MinesweeperGUI:
 
             pygame.display.flip()
             clock.tick(self.framerate)
+
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
+    def get_screen(self):
+        return self.screen
+
+    def get_framerate(self):
+        return self.framerate
+
+    def get_settings(self):
+        return self.settings
