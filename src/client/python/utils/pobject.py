@@ -9,11 +9,9 @@ class Object:
             setattr(self, signal, [])
 
     def signal(self, signal, *args, **kwargs):
-        if getattr(self, "signal_filter", False):
-            if not self.signal_filter(signal, *args, **kwargs):
-                return
         for slot in self.installed_slots.get(signal, []):
-            slot(*args, **kwargs)
+            if slot(*args, **kwargs) == False:
+                break
 
     def connect(self, signal, slot):
         if signal in self.available_signals:

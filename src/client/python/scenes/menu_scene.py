@@ -2,6 +2,7 @@ import pygame
 
 from src.client.python.scenes.scene import Scene
 from src.client.python.scenes.setting_scene import SettingScene
+from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
 from src.client.python.utils.utils import terminate
 from src.client.python.widgets.text import BorderedText, Text
@@ -59,24 +60,12 @@ class MenuScene(Scene):
 
     def run(self, screen, framerate):
         clock = pygame.time.Clock()
+        dispatcher = EventDispatcher([self.play_label, self.settings_label, self.exit_label])
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                if event.type == pygame.MOUSEMOTION:
-                    mouse_position = event.pos
-
-                    label = self.menu_labels.collidepoint(mouse_position)
-                    if label:
-                        label.signal("focused", label)
-                    else:
-                        self.menu_labels.invoke(lambda e: e.set_border_enable(False))
-
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse_position = event.pos
-                    label = self.menu_labels.collidepoint(mouse_position)
-                    if label:
-                        label.signal("clicked", label)
+                dispatcher.dispatch_event(event)
 
             self.draw(screen)
             clock.tick(framerate)
