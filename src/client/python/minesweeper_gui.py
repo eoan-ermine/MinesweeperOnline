@@ -1,5 +1,9 @@
+from os import listdir
+from os.path import isfile, join
+
 import pygame
 
+from src.client.python.music.music import MusicSubsystem
 from src.client.python.scenes.menu_scene import MenuScene
 from src.client.python.settings.settings import Format, Settings
 from src.client.python.utils.utils import FieldDescription
@@ -22,6 +26,11 @@ class MinesweeperGUI:
 
         self.settings.set_value("music_volume", self.settings.value("music_volume", "100"))
 
+        self.music_subsystem = MusicSubsystem(
+            *[f for f in listdir("resources/music") if isfile(join("resources/music", f))]
+        )
+        self.music_subsystem.playlist.set_volume(int(self.settings.value("music_volume", 100)) / 100)
+
     def run(self):
         pygame.init()
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -43,3 +52,6 @@ class MinesweeperGUI:
 
     def get_settings(self):
         return self.settings
+
+    def get_music_subsystem(self):
+        return self.music_subsystem

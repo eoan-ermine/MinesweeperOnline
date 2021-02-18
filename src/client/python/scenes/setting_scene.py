@@ -3,9 +3,9 @@ import pygame
 from src.client.python.scenes.scene import Scene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
+from src.client.python.utils.utils import terminate
 from src.client.python.widgets.slider import Slider
 from src.client.python.widgets.text import Text
-from src.client.python.utils.utils import terminate
 
 
 class SettingScene(Scene):
@@ -20,6 +20,7 @@ class SettingScene(Scene):
         self.menu_labels = None
 
         self.settings = self.game.get_settings()
+        self.music_subsystem = self.game.get_music_subsystem()
 
         self.init_ui()
         self.init_signals()
@@ -42,7 +43,9 @@ class SettingScene(Scene):
         title.set_center((width // 2), height // 15)
 
     def init_signals(self):
-        self.volume_slider.connect("value_stabilized", lambda new: self.settings.set_value("music_volume", str(new)))
+        self.volume_slider.connect("value_stabilized", lambda new: self.settings.set_value("music_volume", str(new))
+                                                                   or self.music_subsystem.playlist.set_volume(
+            new / 100))
         self.volume_slider.set_volume(int(self.settings.value("music_volume")))
 
     def draw(self, screen):
