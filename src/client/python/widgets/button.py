@@ -2,10 +2,11 @@ import pygame
 from pygame import Rect
 
 from src.client.python.utils.pobject import Object
+from src.client.python.widgets.text import Text
 
 
 class Button(Object):
-    def __init__(self, topleft, size):
+    def __init__(self, topleft, size, text=None, text_color=(0, 0, 0)):
         super().__init__(["mouse_down", "mouse_up"])
 
         self.connect("mouse_down", lambda event: self.mouse_down_handler(event))
@@ -16,6 +17,12 @@ class Button(Object):
         self.color = self.color_dark
 
         self.border_rect = Rect(topleft, size)
+
+        self.text = None
+        self.text_color = text_color
+        if text:
+            self.text = Text(pygame.font.Font(None, 30), text, 1, text_color)
+            self.text.set_center(self.border_rect.centerx, self.border_rect.centery)
 
         self.clicked = False
 
@@ -43,3 +50,5 @@ class Button(Object):
             self.color,
             self.border_rect
         )
+        if self.text:
+            self.text.draw(screen)
