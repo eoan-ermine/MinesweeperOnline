@@ -1,9 +1,11 @@
 import pygame
 
+from src.client.python.dialogues.edit_playlist import open_playlist_dialog
 from src.client.python.scenes.scene import Scene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
 from src.client.python.utils.utils import terminate
+from src.client.python.widgets.button import Button
 from src.client.python.widgets.slider import Slider
 from src.client.python.widgets.text import Text
 
@@ -16,6 +18,8 @@ class SettingScene(Scene):
         super().__init__(*args, constants)
 
         self.volume_slider = None
+        self.button = None
+
         self.labels = None
         self.menu_labels = None
 
@@ -35,17 +39,21 @@ class SettingScene(Scene):
         self.labels = Group("labels")
 
         volume_text = Text(font, "Музыка", 1, (0, 0, 0), self.labels)
-        volume_text.set_center((width // 6), (height // 4))
-
+        volume_text.set_topleft((width // 6) - 40, (height // 4 - 10))
         self.volume_slider = Slider((width // 6 + 70, height // 4 - 10), (300, 20), (255, 0, 0))
+
+        playlist_text = Text(font, "Плейлист", 1, (0, 0, 0), self.labels)
+        playlist_text.set_topleft((width // 6) - 40, (height // 4 + 20))
+        self.button = Button((width // 6 + 70, height // 4 + 20), (300, 20), "Редактировать")
+        self.button.connect("mouse_up", lambda e: open_playlist_dialog(self.game))
 
         title = Text(font, title_text, 1, (0, 0, 0), self.labels)
         title.set_center((width // 2), height // 15)
 
     def init_signals(self):
         self.volume_slider.connect("value_stabilized", lambda new: self.settings.set_value("music_volume", str(new))
-                                                                   or self.music_subsystem.playlist.set_volume(
-            new / 100))
+                                                                   or self.music_subsystem.playlist.set_volume(new / 100
+                                                                                                               ))
         self.volume_slider.set_volume(int(self.settings.value("music_volume")))
 
     def draw(self, screen):
@@ -53,6 +61,7 @@ class SettingScene(Scene):
 
         self.labels.draw(screen)
         self.volume_slider.draw(screen)
+        self.button.draw(screen)
 
         pygame.display.flip()
 

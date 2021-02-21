@@ -42,7 +42,8 @@ class Button(Object):
 
     def mouse_up_handler(self):
         if self.clicked:
-            self.change_clicked_state(False)
+            return self.change_clicked_state(False)
+        return False
 
     def draw(self, screen):
         pygame.draw.rect(

@@ -27,6 +27,10 @@ class Text(Object):
     def set_center(self, center_x, center_y):
         self.rect = self.text.get_rect(center=(center_x, center_y))
 
+    def set_topleft(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+
     def draw(self, screen):
         screen.blit(self.text, self.rect)
 
