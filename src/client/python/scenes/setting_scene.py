@@ -58,7 +58,7 @@ class SettingScene(Scene):
 
     def run(self, screen, framerate):
         clock = pygame.time.Clock()
-        dispatcher = EventDispatcher([self.volume_slider])
+        dispatcher = EventDispatcher([self.volume_slider, self.button], self.game)
 
         while True:
             for event in pygame.event.get():

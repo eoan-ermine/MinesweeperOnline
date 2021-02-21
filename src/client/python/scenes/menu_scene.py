@@ -60,7 +60,7 @@ class MenuScene(Scene):
 
     def run(self, screen, framerate):
         clock = pygame.time.Clock()
-        dispatcher = EventDispatcher([self.play_label, self.settings_label, self.exit_label])
+        dispatcher = EventDispatcher([self.play_label, self.settings_label, self.exit_label], self.game)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
