@@ -6,13 +6,6 @@ import pygame
 from src.client.python.music.music import MusicSubsystem
 from src.client.python.scenes.menu_scene import MenuScene
 from src.client.python.settings.settings import Format, Settings
-from src.client.python.utils.utils import FieldDescription
-
-presets = {
-    "Simple": FieldDescription(9, 9, 10),
-    "Intermediate": FieldDescription(16, 16, 40),
-    "Expert": FieldDescription(30, 16, 99),
-}
 
 
 class MinesweeperGUI:
