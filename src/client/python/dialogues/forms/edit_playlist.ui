@@ -31,13 +31,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="edit_btn">
-           <property name="text">
-            <string>Редактировать</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="remove_btn">
            <property name="text">
             <string>Удалить</string>
