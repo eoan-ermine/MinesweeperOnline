@@ -31,6 +31,9 @@ class Text(Object):
         self.rect.x = x
         self.rect.y = y
 
+    def set_content(self, content):
+        self.text = self.font.render(content, self.size, self.color)
+
     def draw(self, screen):
         screen.blit(self.text, self.rect)
 

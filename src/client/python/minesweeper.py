@@ -60,6 +60,9 @@ class Minesweeper:
             self.controller.update_square(x, y)
 
     def open_cell(self, x, y):
+        if self.game_state != GameState.IDLE:
+            return
+
         cell = self.field[y][x]
         content = cell.content
 
@@ -72,12 +75,17 @@ class Minesweeper:
             if content == SquareContent.EMPTY:
                 self.open_around(x, y)
                 if self.check_win():
-                    return GameState.WIN
+                    self.open_cells(lambda e: True, self.flat_field)
+                    return self.set_state(GameState.WIN)
             elif content == SquareContent.MINE:
                 self.open_cells(lambda e: True, self.flat_field)
-                return GameState.FAIL
+                return self.set_state(GameState.FAIL)
+        return self.set_state(GameState.IDLE)
 
-        return GameState.IDLE
+    def set_state(self, new_state):
+        self.game_state = new_state
+        if self.controller:
+            self.controller.update_current_status(new_state)
 
     def set_flag(self, x, y, flag: Flag):
         cell = self.field[x][y]
@@ -93,6 +101,7 @@ class Minesweeper:
         self.flat_field = []
 
         self.controller = controller
+        self.game_state = GameState.IDLE
 
         self.initialize_field()
         self.first_move = True

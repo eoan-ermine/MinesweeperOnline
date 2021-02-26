@@ -29,8 +29,10 @@ def get_text_content(square: Square):
 
 
 class Cell(Object):
-    def __init__(self, topleft, size, game, square: Square):
+    def __init__(self, topleft, size, game, square: Square, font):
         super().__init__(["mouse_down", "mouse_up"])
+
+        self.font = font
 
         self.connect("mouse_down", lambda event: self.mouse_down_handler(event))
         self.connect("mouse_up", lambda _: self.mouse_up_handler())
@@ -49,7 +51,7 @@ class Cell(Object):
         self.clicked = False
 
     def update_square(self):
-        self.text = Text(pygame.font.Font(None, 60), get_text_content(self.square), 1, get_text_color(self.square))
+        self.text = Text(self.font, get_text_content(self.square), 1, get_text_color(self.square))
         self.text.set_center(self.border_rect.centerx, self.border_rect.centery)
 
     def set_flag(self, flag: Flag):
