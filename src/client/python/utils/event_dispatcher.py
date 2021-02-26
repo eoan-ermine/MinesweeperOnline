@@ -1,6 +1,7 @@
 import pygame
 
 from src.client.python.music.music import MUSIC_END_EVENT
+from src.client.python.scenes.scene import CLOSE_SCENE_EVENT
 
 
 class EventDispatcher:
@@ -31,3 +32,5 @@ class EventDispatcher:
             self.dispatch_signal(event, "mouse_up")
         elif event.type == MUSIC_END_EVENT:
             self.music_subsystem.queue_next()
+        elif event_type == CLOSE_SCENE_EVENT:
+            return True

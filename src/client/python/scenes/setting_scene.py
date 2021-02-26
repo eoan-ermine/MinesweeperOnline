@@ -7,7 +7,7 @@ from src.client.python.utils.group import Group
 from src.client.python.utils.utils import terminate
 from src.client.python.widgets.button import Button
 from src.client.python.widgets.slider import Slider
-from src.client.python.widgets.text import Text
+from src.client.python.widgets.text import Text, BorderedText
 
 
 class SettingScene(Scene):
@@ -19,6 +19,7 @@ class SettingScene(Scene):
 
         self.volume_slider = None
         self.button = None
+        self.back_label = None
 
         self.labels = None
         self.menu_labels = None
@@ -50,11 +51,17 @@ class SettingScene(Scene):
         title = Text(font, title_text, 1, (0, 0, 0), self.labels)
         title.set_center((width // 2), height // 15)
 
+        self.back_label = BorderedText(font, "[НАЗАД]", 1, (0, 0, 0), (20, 255, 23), self.labels)
+        self.back_label.set_center((width // 2), height - 50)
+
     def init_signals(self):
         self.volume_slider.connect("value_stabilized", lambda new: self.settings.set_value("music_volume", str(new))
                                                                    or self.music_subsystem.playlist.set_volume(new / 100
                                                                                                                ))
         self.volume_slider.set_volume(int(self.settings.value("music_volume")))
+
+        self.back_label.connect("clicked", lambda e: self.stop())
+        self.back_label.connect("focused", lambda k: k.set_border_enable(True))
 
     def draw(self, screen):
         screen.fill((255, 255, 255))
@@ -67,13 +74,14 @@ class SettingScene(Scene):
 
     def run(self, screen, framerate):
         clock = pygame.time.Clock()
-        dispatcher = EventDispatcher([self.volume_slider, self.button], self.game)
+        dispatcher = EventDispatcher([self.volume_slider, self.button, self.back_label], self.game)
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                dispatcher.dispatch_event(event)
+                if dispatcher.dispatch_event(event):
+                    return
 
             self.draw(screen)
             clock.tick(framerate)
