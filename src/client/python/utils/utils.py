@@ -26,8 +26,6 @@ presets = {
 class SquareContent(Enum):
     MINE = 1,
     EMPTY = 2,
-    MINE_FLAG = 3,
-    QUESTION_FLAG = 4
 
     def describe(self):
         return self.name
@@ -39,15 +37,33 @@ class SquareContent(Enum):
         return self.__repr__()
 
 
+class Flag(Enum):
+    QUESTION_FLAG = 0,
+    MINE_FLAG = 1,
+    NONE_FLAG = 2,
+
+
 class Square:
     def __init__(self, x, y, content: SquareContent, visible: bool, value: int = None):
         self.x = x
         self.y = y
 
         self.content = content
-        self.content.value = value
+        self.value = value
+
+        self.flag = Flag.NONE_FLAG
 
         self.visible = visible
+
+    def set_flag(self, flag: Flag):
+        if not self.visible:
+            self.flag = flag
+
+    def can_open(self) -> bool:
+        return self.flag == Flag.NONE_FLAG and not self.visible
+
+    def set_content(self, content: SquareContent):
+        self.content = content
 
     def __iter__(self):
         return iter((self.x, self.y))
