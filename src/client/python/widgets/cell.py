@@ -22,7 +22,7 @@ def get_text_content(square: Square):
     if not square.visible:
         return " "
 
-    elif square.content == SquareContent.EMPTY:
+    if square.content == SquareContent.EMPTY:
         return str(square.value) if square.value else "."
     else:
         return "*"
@@ -73,7 +73,7 @@ class Cell(Object):
 
     def left_click_handler(self, _):
         state = self.game.open_cell(self.square.x, self.square.y)
-        print(state)
+        return state
 
     def right_click_handler(self, _):
         self.set_flag(NEXT_FLAG_STATE[self.square.flag])

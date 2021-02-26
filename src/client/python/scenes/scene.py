@@ -12,5 +12,6 @@ class Scene:
     def run(self, screen, framerate):
         pass
 
-    def stop(self):
+    @staticmethod
+    def stop():
         pygame.event.post(pygame.event.Event(CLOSE_SCENE_EVENT))
