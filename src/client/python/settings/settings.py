@@ -7,20 +7,32 @@ class Format(Enum):
     MemoryFormat = 1,
 
 
-def ini_writer(filename: str, key: str, value):
+def get_ini_config(filename: str) -> configparser.ConfigParser:
     config = configparser.ConfigParser()
     config.read(filename)
+    return config
 
-    config['DEFAULT'][key] = value
 
+def get_config(storage, format):
+    if format == Format.MemoryFormat:
+        return storage
+    elif format == Format.IniFormat:
+        return get_ini_config(storage)
+
+
+def update_ini_file(filename, config):
     with open(filename, 'w') as configfile:
         config.write(configfile)
 
 
-def ini_reader(filename, key, default_value):
-    config = configparser.ConfigParser()
-    config.read(filename)
+def ini_writer(filename: str, key: str, value):
+    config = get_ini_config(filename)
+    config['DEFAULT'][key] = value
+    update_ini_file(filename, config)
 
+
+def ini_reader(filename, key, default_value):
+    config = get_ini_config(filename)
     return config.get('DEFAULT', key, fallback=default_value)
 
 
@@ -43,8 +55,11 @@ class Settings:
         self.format = format
 
     def all_keys(self):
-        # TODO IMPLEMENT IT
-        return self.variables.keys()
+        config = get_config(self.storage, self.format)
+        if self.format == Format.MemoryFormat:
+            return list(config.keys())
+        elif self.format == Format.IniFormat:
+            return list(config['DEFAULT'].keys())
 
     def storage(self):
         return self.storage
@@ -53,8 +68,13 @@ class Settings:
         return self.format
 
     def clear(self):
-        # TODO IMPLEMENT IT
-        self.variables.clear()
+        config = get_config(self.storage, self.format)
+        if self.format == Format.MemoryFormat:
+            config.clear()
+        elif self.format == Format.IniFormat:
+            for key in self.all_keys():
+                del config['DEFAULT'][key]
+            update_ini_file(self.storage, config)
 
     def set_value(self, key, value):
         self.writer(self.storage, key, value)
@@ -63,5 +83,9 @@ class Settings:
         return self.reader(self.storage, key, default_value)
 
     def remove(self, key):
-        # TODO IMPLEMENT IT
-        self.variables.pop(key)
+        config = get_config(self.storage, self.format)
+        if self.format == Format.MemoryFormat:
+            del config[key]
+        elif self.format == Format.IniFormat:
+            del config['DEFAULT'][key]
+            update_ini_file(self.storage(), config)
