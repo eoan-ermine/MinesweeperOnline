@@ -6,6 +6,7 @@ import pygame
 from src.client.python.music.music import MusicSubsystem
 from src.client.python.scenes.menu_scene import MenuScene
 from src.client.python.settings.settings import Format, Settings
+from src.client.python.utils.utils import load_image
 
 
 class MinesweeperGUI:
@@ -26,6 +27,8 @@ class MinesweeperGUI:
 
     def run(self):
         pygame.init()
+
+        pygame.display.set_icon(load_image("icon.png"))
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("The Ultimate Minesweeper")
 
