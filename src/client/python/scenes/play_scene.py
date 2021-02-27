@@ -4,9 +4,9 @@ from src.client.python.minesweeper import Minesweeper
 from src.client.python.scenes.scene import Scene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
-from src.client.python.utils.utils import terminate, GameState
+from src.client.python.utils.utils import GameState
 from src.client.python.widgets.cell import Cell
-from src.client.python.widgets.text import Text
+from src.client.python.widgets.text import Text, BorderedText
 
 STATUS_MACHINE = {
     GameState.IDLE: "В игре",
@@ -23,7 +23,7 @@ class PlayScene(Scene):
         self.indicator_font = pygame.font.Font(None, 30)
 
         self.minesweeper = Minesweeper(self.description, self)
-        self.original_screen = self.game.screen
+        self.original_size = self.game.screen.get_size()
 
         self.width = self.description.width
         self.height = self.description.height
@@ -39,9 +39,11 @@ class PlayScene(Scene):
         self.current_status = Text(self.indicator_font, "None", 1, (0, 0, 0), self.labels)
         self.status_label = Text(self.indicator_font, "Статус:", 1, (0, 0, 0), self.labels)
 
-        self.exit_label = Text(self.indicator_font, "Вернуться в меню", 1, (0, 0, 0), self.labels)
+        self.exit_label = BorderedText(self.indicator_font, "[Вернуться в меню]", 1, (0, 0, 0), (20, 255, 23),
+                                       self.labels)
 
         self.init_ui()
+        self.init_signals()
 
     def update_square(self, x, y):
         self.cells[y][x].update_square()
@@ -56,6 +58,11 @@ class PlayScene(Scene):
                                for i in range(self.width)])
         self.status_label.set_topleft(self.squares_width_x + 10, 20)
         self.current_status.set_topleft(self.squares_width_x + 90, 20)
+        self.exit_label.set_topleft(self.squares_width_x + 10, self.height_y - 30)
+
+    def init_signals(self):
+        self.exit_label.connect("clicked", lambda e: self.stop())
+        self.exit_label.connect("focused", lambda k: k.set_border_enable(True))
 
     def draw(self, screen):
         screen.fill((255, 255, 255))
@@ -69,12 +76,13 @@ class PlayScene(Scene):
 
     def run(self, screen, framerate):
         clock = pygame.time.Clock()
-        dispatcher = EventDispatcher([item for sublist in self.cells for item in sublist], self.game)
+        dispatcher = EventDispatcher(
+            [item for sublist in self.cells for item in sublist] + list(self.labels.__iter__()), self.game)
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    terminate()
-                dispatcher.dispatch_event(event)
+                if dispatcher.dispatch_event(event):
+                    self.game.screen = pygame.display.set_mode(self.original_size)
+                    return
 
             self.draw(screen)
             clock.tick(framerate)

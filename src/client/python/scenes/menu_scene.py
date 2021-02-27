@@ -65,8 +65,6 @@ class MenuScene(Scene):
         dispatcher = EventDispatcher([self.play_label, self.settings_label, self.exit_label], self.game)
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    terminate()
                 dispatcher.dispatch_event(event)
 
             self.draw(screen)

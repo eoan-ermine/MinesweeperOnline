@@ -4,7 +4,6 @@ from src.client.python.dialogues.edit_playlist import open_playlist_dialog
 from src.client.python.scenes.scene import Scene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
-from src.client.python.utils.utils import terminate
 from src.client.python.widgets.button import Button
 from src.client.python.widgets.slider import Slider
 from src.client.python.widgets.text import Text, BorderedText
@@ -78,8 +77,6 @@ class SettingScene(Scene):
 
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    terminate()
                 if dispatcher.dispatch_event(event):
                     return
 

@@ -18,7 +18,7 @@ class MusicSubsystem:
         pygame.mixer.init()
 
         self.playlist = pygame.mixer.Channel(0)
-        pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
+        self.playlist.set_endevent(MUSIC_END_EVENT)
 
         self.sounds = [
             MusicTrack(filename, "resources/music/") for filename in args
@@ -38,3 +38,7 @@ class MusicSubsystem:
     def queue_next(self):
         self.current_sound = (self.current_sound + 1) % self.length_of_playlist
         self.playlist.queue(self.sounds[self.current_sound].sound)
+        print(self.sounds[self.current_sound])
+
+    def stop(self):
+        self.playlist.stop()

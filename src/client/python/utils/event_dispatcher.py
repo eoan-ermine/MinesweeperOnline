@@ -2,6 +2,7 @@ import pygame
 
 from src.client.python.music.music import MUSIC_END_EVENT
 from src.client.python.scenes.scene import CLOSE_SCENE_EVENT
+from src.client.python.utils.utils import terminate
 
 
 class EventDispatcher:
@@ -25,12 +26,15 @@ class EventDispatcher:
 
         if event_type == pygame.MOUSEMOTION:
             self.dispatch_signal(event, "mouse_motion")
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event_type == pygame.MOUSEBUTTONDOWN:
             self.dispatch_signal(event, "mouse_down")
             self.dispatch_signal(event, "clicked")
-        elif event.type == pygame.MOUSEBUTTONUP:
+        elif event_type == pygame.MOUSEBUTTONUP:
             self.dispatch_signal(event, "mouse_up")
-        elif event.type == MUSIC_END_EVENT:
+        elif event_type == MUSIC_END_EVENT:
             self.music_subsystem.queue_next()
         elif event_type == CLOSE_SCENE_EVENT:
             return True
+        elif event_type == pygame.QUIT:
+            self.music_subsystem.stop()
+            terminate()

@@ -5,7 +5,6 @@ from src.client.python.scenes.scene import Scene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
 from src.client.python.utils.utils import presets
-from src.client.python.utils.utils import terminate
 from src.client.python.widgets.text import BorderedText, Text
 
 
@@ -80,8 +79,6 @@ class SetupScene(Scene):
         dispatcher = EventDispatcher(self.labels, self.game)
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    terminate()
                 if dispatcher.dispatch_event(event):
                     return
 
