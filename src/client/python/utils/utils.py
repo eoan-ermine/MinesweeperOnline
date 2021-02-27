@@ -1,7 +1,5 @@
 import sys
-import tkinter as tk
 from enum import Enum
-from tkinter import filedialog
 
 import pygame
 import win32api
@@ -113,16 +111,3 @@ def terminate():
 
     pygame.quit()
     sys.exit(0)
-
-
-def import_music():
-    root = tk.Tk()
-    root.withdraw()
-
-    filepath = tk.filedialog.askopenfilenames(
-        title="Import music", filetypes=[
-            ("music", ".mp3"),
-            ("music", ".ogg"),
-        ]
-    )
-    return list(filepath)

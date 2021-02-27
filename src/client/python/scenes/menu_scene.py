@@ -5,7 +5,6 @@ from src.client.python.scenes.setting_scene import SettingScene
 from src.client.python.scenes.setup_scene import SetupScene
 from src.client.python.utils.event_dispatcher import EventDispatcher
 from src.client.python.utils.group import Group
-from src.client.python.utils.utils import terminate
 from src.client.python.widgets.text import BorderedText, Text
 
 
@@ -52,7 +51,7 @@ class MenuScene(Scene):
         self.settings_label.connect("clicked", lambda e: SettingScene(self.game).run(
             self.game.get_screen(), self.game.get_framerate()
         ))
-        self.exit_label.connect("clicked", lambda e: terminate())
+        self.exit_label.connect("clicked", lambda e: pygame.event.post(pygame.event.Event(pygame.QUIT)))
         self.menu_labels.invoke(lambda e: e.connect("focused", lambda k: k.set_border_enable(True)))
 
     def draw(self, screen):
@@ -66,6 +65,5 @@ class MenuScene(Scene):
         while True:
             for event in pygame.event.get():
                 dispatcher.dispatch_event(event)
-
             self.draw(screen)
             clock.tick(framerate)
